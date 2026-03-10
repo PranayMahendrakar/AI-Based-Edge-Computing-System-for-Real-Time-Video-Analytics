@@ -1,0 +1,68 @@
+# Core Deep Learning Frameworks
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# YOLO Object Detection
+ultralytics>=8.0.0
+
+# Computer Vision
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0
+Pillow>=10.0.0
+imageio>=2.31.0
+scikit-image>=0.21.0
+
+# EfficientNet & MobileNet (via timm)
+timm>=0.9.0
+
+# Data Processing & Scientific Computing
+numpy>=1.24.0
+scipy>=1.11.0
+pandas>=2.0.0
+
+# Model Optimization & Quantization
+onnx>=1.14.0
+onnxruntime>=1.15.0
+onnxruntime-gpu>=1.15.0
+
+# TensorRT (for Jetson/NVIDIA edge devices)
+# tensorrt>=8.6.0  # Install separately from NVIDIA
+
+# Tracking & Analytics
+filterpy>=1.4.5         # Kalman filter for object tracking
+lap>=0.4.0              # Linear assignment problem solver
+
+# Visualization & Dashboard
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# API & Streaming
+fastapi>=0.100.0
+uvicorn>=0.23.0
+websockets>=11.0
+
+# Configuration Management
+PyYAML>=6.0.0
+python-dotenv>=1.0.0
+omegaconf>=2.3.0
+
+# Logging & Monitoring
+loguru>=0.7.0
+tqdm>=4.65.0
+rich>=13.4.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-benchmark>=4.0.0
+
+# Utilities
+requests>=2.31.0
+psutil>=5.9.0
+click>=8.1.0
+pydantic>=2.0.0
+
+# Hardware Monitoring (Jetson)
+# jetson-stats>=4.2.0  # Install separately on Jetson devices
