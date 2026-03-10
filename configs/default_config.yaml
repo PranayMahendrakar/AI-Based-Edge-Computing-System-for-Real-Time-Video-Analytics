@@ -1,0 +1,139 @@
+# ============================================================================
+# AI-Based Edge Computing System for Real-Time Video Analytics
+# Default System Configuration
+# Author: Pranay M Mahendrakar
+# ============================================================================
+
+# ─── System Settings ────────────────────────────────────────────────────────
+system:
+  name: "EdgeVideoAnalytics"
+  version: "1.0.0"
+  author: "Pranay M Mahendrakar"
+  log_level: "INFO"           # DEBUG | INFO | WARNING | ERROR
+  log_file: "logs/edge_analytics.log"
+
+# ─── Inference Engine Settings ──────────────────────────────────────────────
+inference:
+  device: "cpu"               # cpu | cuda | trt (TensorRT)
+  target_fps: 30              # Target frames per second
+  max_queue_size: 10          # Frame buffer size
+  drop_frames: true           # Enable adaptive frame dropping
+  verbose: false              # Detailed per-stage logging
+
+# ─── Model Configurations ───────────────────────────────────────────────────
+models:
+  # YOLO Object Detector
+  yolo:
+    variant: "yolov8n"        # yolov8n | yolov8s | yolov8m
+    confidence: 0.5           # Detection confidence threshold (0.0–1.0)
+    nms_threshold: 0.45       # Non-maximum suppression threshold
+    max_detections: 100       # Maximum detections per frame
+    half_precision: false     # FP16 (requires CUDA)
+    input_size: [640, 640]    # [height, width]
+    target_classes: null      # null = all classes, or list of class IDs
+
+  # MobileNet Classifier
+  mobilenet:
+    variant: "small"          # small | large
+    confidence: 0.3           # Classification confidence threshold
+    top_k: 5                  # Number of top predictions to return
+    half_precision: false
+    input_size: [224, 224]
+
+  # EfficientNet Classifier
+  efficientnet:
+    variant: "b0"             # b0 | b1 | b2 | b3 | lite0
+    confidence: 0.3
+    top_k: 5
+    use_timm: true            # Use timm library for loading
+    half_precision: false
+    input_size: [224, 224]    # Varies by variant
+
+# ─── Video Pipeline Settings ────────────────────────────────────────────────
+video:
+  input:
+    source: 0                 # 0 = webcam, or file path or RTSP URL
+    width: 1280               # Capture width (0 = native)
+    height: 720               # Capture height (0 = native)
+    fps: 30                   # Capture FPS (0 = native)
+    buffer_size: 5            # OpenCV capture buffer size
+
+  output:
+    show: true                # Display annotated video
+    save: false               # Save output video
+    output_path: "output.mp4"
+    codec: "mp4v"
+    fps: 30
+
+  preprocessing:
+    normalize: true
+    mean: [0.485, 0.456, 0.406]    # ImageNet mean
+    std: [0.229, 0.224, 0.225]     # ImageNet std
+    letterbox: true           # Preserve aspect ratio with padding
+
+# ─── Model Optimization ─────────────────────────────────────────────────────
+optimization:
+  tensorrt:
+    enabled: false
+    precision: "fp16"         # fp32 | fp16 | int8
+    workspace_gb: 4
+    min_batch: 1
+    opt_batch: 1
+    max_batch: 4
+
+  quantization:
+    enabled: false
+    method: "dynamic"         # dynamic | static | qat
+    dtype: "int8"
+
+  pruning:
+    enabled: false
+    sparsity: 0.5
+
+# ─── Performance Monitoring ─────────────────────────────────────────────────
+monitoring:
+  latency_window: 100        # Rolling window for latency stats
+  alert_latency_ms: 100      # Alert if latency exceeds this
+  log_interval_frames: 50    # Log stats every N frames
+  save_stats: false
+  stats_path: "logs/performance_stats.json"
+
+# ─── Hardware Profiles (Edge Devices) ───────────────────────────────────────
+hardware_profiles:
+  jetson_nano:
+    device: "cuda"
+    target_fps: 25
+    model_variant: "yolov8n"
+    half_precision: true
+    power_mode: "MAXN"
+
+  jetson_xavier:
+    device: "cuda"
+    target_fps: 60
+    model_variant: "yolov8s"
+    half_precision: true
+    power_mode: "MODE_30W"
+
+  raspberry_pi_4:
+    device: "cpu"
+    target_fps: 10
+    model_variant: "mobilenet_small"
+    half_precision: false
+
+  coral_tpu:
+    device: "tpu"
+    target_fps: 30
+    model_variant: "efficientnet_lite0"
+    half_precision: false
+
+  desktop_cpu:
+    device: "cpu"
+    target_fps: 15
+    model_variant: "yolov8n"
+    half_precision: false
+
+  desktop_gpu:
+    device: "cuda"
+    target_fps: 60
+    model_variant: "yolov8s"
+    half_precision: true
